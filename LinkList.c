@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Link List Struct
 typedef struct node {
@@ -88,6 +89,53 @@ void delete_tail(node** head) {
     temp2->next = NULL;
 
     free(temp);
+}
+
+// Delete Link List Node By Value 
+void delete_node_by_value(node** head, int data) {
+
+    bool isFound = false;
+    
+    node* temp1 = *head;
+    node* temp2 = *head;
+
+    while (temp1->next != NULL) {
+
+        temp2 = temp1;
+        temp1 = temp1->next;
+
+        if (temp1->data == data) {
+           isFound = true;
+           break;
+        }
+    }
+
+    if (isFound == true) {
+        temp2->next = temp1->next;
+
+        free(temp1);
+    }
+}
+
+// Reverse Link List
+void reverse_link (node** head) {
+
+    node* temp = *head;
+    node* tail = *head;
+
+    while(tail->next != NULL) {
+        tail = tail->next;
+    }
+
+    node* tail2 = tail;
+
+    while(temp != tail) {
+        tail2->next = temp;
+        temp = temp->next;
+        tail2->next = temp;
+    }
+
+
 }
 
 int main() {
