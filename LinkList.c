@@ -35,15 +35,29 @@ void insert_tail(node** head, int data) {
 
     node* temp = *head;
 
-    while( temp->next != NULL) {
+    while(temp->next != NULL) {
         temp = temp->next;
     }
     
     temp->next = new_node; 
 }
 
-void delete_head() {
-    
+void delete_head(node** head) {
+    if(*head == NULL) {
+        return;
+    }
+
+    if ((*head)->next == NULL) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    node* temp = *head;
+
+    *head = temp->next;
+
+    free(temp);
 }
 
 void delete_tail(node** head) {
@@ -83,6 +97,7 @@ int main() {
     insert_tail(&head, 4);
 
     delete_tail(&head);
+    delete_head(&head);
 
     print_link(head);
 }
