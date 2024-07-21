@@ -21,9 +21,25 @@ void print_link(node* head) {
 
 void insert_head(node** head, int data) {
     node* new_node = (node*)malloc(sizeof(node));
+
     new_node->data = data;
     new_node->next = *head; 
+
     *head = new_node;
+}
+
+void insert_tail(node** head, int data) {
+    node* new_node = (node*)malloc(sizeof(node));
+    new_node->data = data;
+    new_node->next = NULL;
+
+    node* temp = *head;
+
+    while( temp->next != NULL) {
+        temp = temp->next;
+    }
+    
+    temp->next = new_node; 
 }
 
 int main() {
@@ -33,6 +49,10 @@ int main() {
     insert_head(&head, 2);
     insert_head(&head, 3);
     insert_head(&head, 4);
+
+    insert_tail(&head, 10);
+    insert_tail(&head, 2);
+    insert_tail(&head, 4);
 
     print_link(head);
 }
