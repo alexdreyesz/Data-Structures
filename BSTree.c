@@ -66,55 +66,57 @@ void postorder_traversal(node* root) {
 }
 
 int main () {
-
-     printf("\n\n");
-
     node* root = NULL;
-    int option;
 
-    root = bst_insert(root, 3);
-    root = bst_insert(root, 1);
-    root = bst_insert(root, 2);
-    root = bst_insert(root, 4);
-    root = bst_insert(root, 6);
+    int option = 0;
+    int data = 0;
 
-    preorder_traversal(root);
-    printf("NULL\n\n");
+    printf("MENU: BSTree\n");
+    printf("Option 1: Insert Node\n");
+    printf("Option 2: PreOrder Traversal\n");
+    printf("Option 3: Inorder Traversal\n");
+    printf("Option 4: PostOrder Traversal\n");
+    printf("Option 5: Stop Program\n");
 
-    inorder_traversal(root);
-    printf("NULL\n\n");
-
-    postorder_traversal(root);
-    printf("NULL\n\n");
-    
-    printf("\n\n");
-
-
-    /*
-    while(option != 6) {
-        printf("Select An Option: ");
+    while(option != 5) {
+        printf("\nSelect An Option: ");
         scanf("%d", &option);
 
         switch(option) {
-            // Option 1:
+            // Option 1: Insert Node
             case 1:
+                printf("Input Node Value: ");
+                scanf("%d", &data);
+                root = bst_insert(root, data);
                 break;
-
-            // Option 2:
+            // Option 2: PreOrder Traversal
             case 2:
+                printf("\nPreOrder Traversal:\n");
+                preorder_traversal(root);
+                printf("NULL\n\n");
                 break;
-
-            // Option 3:
+            // Option 3: Inorder Traversal
             case 3:
+                printf("\nInOrder Traversal:\n");
+                inorder_traversal(root);
+                printf("NULL\n\n");
                 break;
-
+            // Option 4: PostOrder Traversal
+            case 4:
+                printf("\nPostOrder Traversal:\n");
+                postorder_traversal(root);
+                printf("NULL\n\n");
+                break;
+            // Option 5: Stop Program
+            case 5:
+                printf("Program Ended\n");
+                break;
             // Default Wrong Input 
             default:
-                printf("Wrong Input");
+                printf("Wrong Input\n");
                 break;
         } 
     }
-    */
 
     return 0;
 }
