@@ -6,52 +6,46 @@ typedef struct node{
     struct node* next;
 } node;
 
-typedef struct stack{
-    struct node* top;
-    struct node* bottom;
-} stack;
-
-void print_stack(stack* line) {
-    if(line->bottom == NULL) {
+void print_stack(node* top) {
+    if(top == NULL) {
         printf("NULL\n\n");
         return;
     }
-    
-    node* current = line->bottom;
 
-    while(current != NULL) {
-        printf("%d -> ", current->data);
-        current = current->next;
+    while(top->next != NULL) {
+        printf("%d -> ", top->data);
+        top = top->next;
     }
 
     printf("NULL\n\n");
 }
 
-void push(stack* line, int data) {
+void push(node** top, int data) {
     node* new_node = (node*)malloc(sizeof(node));
     new_node->data = data;
-    new_node->next = NULL;
 
-    if(line->bottom == NULL) {
-        line->top = new_node;
-        line->bottom = new_node;
-        return;
-    }
+    if(*top == NULL) {
+        *top = new_node;
+    } 
 
-    line->top->next = new_node;
-    line->top = new_node;
+    new_node->next = *top;
+    *top = new_node;
 }
 
-int pop(stack* line) {
-    if(line->top == NULL) {
+int pop(node** top) {
+    if(top == NULL) {
         return 0 ;
     }
 
-    node* temp = line->top;
+    int value = (*top)->data;
 
-    line->top = line->top->next;
+    node* temp = *top;
+
+    *top = (*top)->next;
 
     free(temp);
+
+    return value;
 }
 
 void peek() {
@@ -59,29 +53,28 @@ void peek() {
 }
 
 int main() {
-
-    stack* line = (stack*)malloc(sizeof(stack));
-    line->top = NULL;
-    line->bottom = NULL;
+    node* top = (node*)malloc(sizeof(node));
 
     int deleted = 0;
 
-    push(line, 8);
-    push(line, 2);
-    push(line, 6);
-    push(line, 9);
-    push(line, 1);
+    push(&top, 8);
+    push(&top, 2);
+    push(&top, 6);
+    push(&top, 9);
+    push(&top, 1);
 
-    deleted = pop(line);
-    printf("Pop: %d", deleted);
+    print_stack(top);
 
-    deleted = pop(line);
-    printf("Pop: %d", deleted);
+    deleted = pop(&top);
+    printf("Pop: %d\n\n", deleted);
 
-    deleted = pop(line);
-    printf("Pop: %d", deleted);
+    deleted = pop(&top);
+    printf("Pop: %d\n\n", deleted);
 
-    print_stack(line);
+    deleted = pop(&top);
+    printf("Pop: %d\n\n", deleted);
+
+    print_stack(top);
 
     return 0;
 }
