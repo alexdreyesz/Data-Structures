@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct node{
-    int data;
+    char data;
     struct node* next;
 } node;
 
@@ -54,6 +54,10 @@ int peek(node* top) {
     }
 
     return top->data;
+}
+
+void FEQuestion(node* ) {
+
 }
 
 int main() {
