@@ -33,7 +33,7 @@ void push(node** top, int data) {
 }
 
 int pop(node** top) {
-    if(top == NULL) {
+    if(*top == NULL) {
         return 0;
     }
 
@@ -48,12 +48,17 @@ int pop(node** top) {
     return value;
 }
 
-void peek() {
+int peek(node* top) {
+    if(top == NULL) {
+        return 0;
+    }
 
+    return top->data;
 }
 
 int main() {
     node* top = (node*)malloc(sizeof(node));
+    top->next = NULL;
 
     int option = 0;
     int data = 0;
@@ -82,7 +87,7 @@ int main() {
             printf("Pop: %d\n", deleted);
             break;
         case 3: // Option 3: Peek Node
-            printf("Peek: ");
+            printf("Peek: %d\n", peek(top));
             break;
         case 4: // Option 4: Print Stack
             print_stack(top);
