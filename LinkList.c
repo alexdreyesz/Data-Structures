@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 // Link List Struct
 typedef struct node {
@@ -91,35 +90,45 @@ void delete_tail(node** head) {
     free(temp);
 }
 
-// Delete Link List Node By Value 
-void delete_node_by_value(node** head, int data) {
-
-    bool isFound = false;
+// Delete Link List And Free It
+void free_link(node** head) {
+    if(*head == NULL) {
+        return;
+    }
     
+    node* temp = NULL;
+
+    while (*head != NULL) {
+        temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+}
+
+// Delete Link List Node By Value 
+void delete_node_by_value(node** head, int data) { 
+    if(*head == NULL) {
+        return;
+    }
+
     node* temp1 = *head;
     node* temp2 = *head;
 
     while (temp1->next != NULL) {
-
         temp2 = temp1;
         temp1 = temp1->next;
 
-        if (temp1->data == data) {
-           isFound = true;
-           break;
-        }
+        if(temp1->data == data) {
+            break;
+        } 
     }
 
-    if (isFound == true) {
-        temp2->next = temp1->next;
-
-        free(temp1);
-    }
+    temp2->next = temp1->next;
+    free(temp1);
 }
 
 // Reverse Link List
 void reverse_link (node** head) {
-
     node* temp = *head;
     node* tail = *head;
 
@@ -149,10 +158,12 @@ int main() {
     printf("Option 2: Insert Tail \n");
     printf("Option 3: Delete Head \n");
     printf("Option 4: Delete Tail \n");
-    printf("Option 5: Print \n");
-    printf("Option 6: Stop Program \n");
+    printf("Option 5: Delete By Value \n");
+    printf("Option 6: Free Link List \n");
+    printf("Option 7: Print \n");
+    printf("Option 8: Stop Program \n");
 
-    while(option != 6) {
+    while(option != 8) {
 
         printf("\nChoose Your Option: ");
         scanf("%d", &option);
@@ -160,36 +171,38 @@ int main() {
         // Link List Menu Options 
         switch (option)
         {
-        // Option 1: Insert Head Link List
-        case 1:
+        case 1: // Option 1: Insert Head Link List
             printf("Insert Node Value: ");
             scanf("%d", &data);
             insert_head(&head, data);
             break;
-        // Option 2: Insert Tail Link List
-        case 2:
+        case 2: // Option 2: Insert Tail Link List
             printf("Insert Node Value: ");
             scanf("%d", &data);
             insert_tail(&head, data);
             break;
-        // Option 3: Delete Head Link List
-        case 3:
+        case 3: // Option 3: Delete Head Link List
             delete_head(&head);
             break;
-        // Option 4: Delete Tail Link List
-        case 4:
+        case 4: // Option 4: Delete Tail Link List
             delete_tail(&head);
             break;
-        // Option 5: Print Link List 
-        case 5:
+        case 5: // Option 5: Delete By Value
+            printf("Delete By Value: ");
+            scanf("%d", &data);
+            delete_node_by_value(&head, data);
+            break;
+        case 6: // Option 6: Free Link List
+            printf("Linked List Deleted\n");
+            free_link(&head);
+            break;
+        case 7: // Option 7: Print Link List 
             print_link(head);
             break;
-        // Option 6: Stop Program
-        case 6:
+        case 8: // Option 8: Stop Program
             printf("Closing Link List Program \n");
             break;
-        // Default Option
-        default:
+        default: // Default Option
             printf("Invalid Option \n");
             break;
         }
