@@ -153,6 +153,7 @@ int main() {
     int option = 0;
     int data = 0;
 
+    // Menu Text
     printf("MENU: Link List \n");
     printf("Option 1: Insert Head \n");
     printf("Option 2: Insert Tail \n");
@@ -163,6 +164,7 @@ int main() {
     printf("Option 7: Print \n");
     printf("Option 8: Stop Program \n");
 
+    // Menu Options
     while(option != 8) {
 
         printf("\nChoose Your Option: ");
