@@ -20,6 +20,7 @@ void printHeap(Heap* heap);
 // Create Heap
 Heap* createHeap() {
     Heap *heap =(Heap*)malloc(sizeof(Heap));
+
     heap->size = 0;
     heap->capacity = 10;
     heap->array = (int*)malloc(sizeof(int) * heap->capacity);
@@ -61,6 +62,61 @@ void swap(Heap *heap, int parent_index, int child_index) {
     heap->array[child_index] = temporary;
 }
 
+// Delete A Value From The Heap 
+void delete(Heap* heap, int value) {
+    if(heap->size == 0) {
+        printf("Heap Is Empty\n\n");
+        return;
+    }
+
+    int index = -1;
+
+    for(int i = 0; i < heap->size; i++) {
+        if(heap->array[i] == value) {
+            index = i;
+            break;
+        }
+    }
+
+    if(index == -1) {
+        printf("No Value Found\n\n");
+        return;
+    }
+
+    // Replace The Element To Delete With The Last Element
+    heap->array[index] = heap->array[heap->size - 1];
+    heap->size--;
+
+    percolateDown(heap, index);
+}
+
+// Helper Function For Delete: Percolate Down The Value Until It Is In The Correct Index
+void percolateDown(Heap* heap, int index) {
+    while (index < heap->size) {
+        int largest = index;
+        int leftChild = 2 * index + 1;
+        int rightChild = 2 * index + 2;
+
+        if (leftChild < heap->size && heap->array[leftChild] > heap->array[largest]) {
+            largest = leftChild;
+        }
+
+        if (rightChild < heap->size && heap->array[rightChild] > heap->array[largest]) {
+            largest = rightChild;
+        }
+
+        if (largest == index) {
+            break;
+        }
+
+        int temp = heap->array[index];
+        heap->array[index] = heap->array[largest];
+        heap->array[largest] = temp;
+
+        index = largest;
+    }
+}
+
 // Print Heap
 void printHeap(Heap* heap) {
     for(int i = 0; i < heap->size; i++) {
@@ -71,8 +127,8 @@ void printHeap(Heap* heap) {
 }
 
 int main() {
-    // Create Heap
-    Heap* heap = createHeap(); 
+     //Create Heap
+    Heap* heap = createHeap();
 
     // Insert Values
     insert(heap, 5);
@@ -83,6 +139,14 @@ int main() {
     insert(heap, 9);
 
     // Print Heap
+    printHeap(heap);
+
+    // Delete Values
+    delete(heap, 6);
+    delete(heap, 7);
+    delete(heap, 2);
+
+    // Print Heap After Deleted Values
     printHeap(heap);
 
     return 0;
