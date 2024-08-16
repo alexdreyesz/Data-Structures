@@ -4,22 +4,45 @@
 typedef struct Heap {
     int *array;
     int size;
-    int capacity
+    int capacity;
 } Heap;
 
-Heap * heap_heap(){
+Heap* createHeap();
+void swap();
+void percolateUp();
+void percolateDown();
+void insert();
+void delete();
+
+Heap* createHeap() {
     Heap *heap =(Heap*)malloc(sizeof(Heap));
     heap->size = 0;
-    heap->capacity = 5;
+    heap->capacity = 10;
     heap->array = (int*)malloc(sizeof(int) * heap->capacity);
 
     return heap;
-} 
+}
+
+void swap(Heap *heap, int child_index, int parent_index) {
+    int temporary = heap->array[child_index]; 
+
+    
+}
+
+void percolateUp() {
+
+}
+
+void percolateDown() {
+    
+}
 
 int main() {
+    Heap* heap = createHeap();
 
-    Heap* heap = create_heap(); 
-    
+    printf("Array: %d\n", heap->array[0]);
+    printf("Size: %d\n", heap->size);
+    printf("Capacity: %d\n", heap->capacity);
 
     return 0;
 } 
