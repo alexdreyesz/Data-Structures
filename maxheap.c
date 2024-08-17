@@ -13,8 +13,8 @@ Heap* createHeap();
 void insert(Heap *heap, int value);
 void percolateUp(Heap *heap, int index);
 void swap(Heap *heap, int child_index, int parent_index);
-void delete();
-void percolateDown();
+void delete(Heap* heap);
+void percolateDown(Heap* heap, int index);
 void printHeap(Heap* heap);
 
 // Create Heap
@@ -62,56 +62,40 @@ void swap(Heap *heap, int parent_index, int child_index) {
     heap->array[child_index] = temporary;
 }
 
-// Delete A Value From The Heap 
-void delete(Heap* heap, int value) {
+// Delete Root From The Heap 
+void delete(Heap* heap) {
     if(heap->size == 0) {
         printf("Heap Is Empty\n\n");
         return;
     }
 
-    int index = -1;
-
-    for(int i = 0; i < heap->size; i++) {
-        if(heap->array[i] == value) {
-            index = i;
-            break;
-        }
-    }
-
-    if(index == -1) {
-        printf("No Value Found\n\n");
-        return;
-    }
-
-    // Replace The Element To Delete With The Last Element
-    heap->array[index] = heap->array[heap->size - 1];
+    // Replace The Root To Delete With The Last Element
+    heap->array[0] = heap->array[heap->size - 1];
     heap->size--;
 
-    percolateDown(heap, index);
+    percolateDown(heap, 0);
 }
 
 // Helper Function For Delete: Percolate Down The Value Until It Is In The Correct Index
 void percolateDown(Heap* heap, int index) {
     while (index < heap->size) {
         int largest = index;
-        int leftChild = 2 * index + 1;
-        int rightChild = 2 * index + 2;
+        int left_child = 2 * index + 1;
+        int right_child = 2 * index + 2;
 
-        if (leftChild < heap->size && heap->array[leftChild] > heap->array[largest]) {
-            largest = leftChild;
+        if (left_child < heap->size && heap->array[left_child] > heap->array[largest]) {
+            largest = left_child;
         }
 
-        if (rightChild < heap->size && heap->array[rightChild] > heap->array[largest]) {
-            largest = rightChild;
+        if (right_child < heap->size && heap->array[right_child] > heap->array[largest]) {
+            largest = right_child;
         }
 
         if (largest == index) {
             break;
         }
 
-        int temp = heap->array[index];
-        heap->array[index] = heap->array[largest];
-        heap->array[largest] = temp;
+        swap(heap, index, largest);
 
         index = largest;
     }
@@ -141,10 +125,9 @@ int main() {
     // Print Heap
     printHeap(heap);
 
-    // Delete Values
-    delete(heap, 6);
-    delete(heap, 7);
-    delete(heap, 2);
+    // Delete Root Values
+    delete(heap);
+    delete(heap);
 
     // Print Heap After Deleted Values
     printHeap(heap);
