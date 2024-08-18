@@ -13,7 +13,7 @@ Heap* createHeap();
 void insert(Heap* heap, int value);
 void percolateUp(Heap* heap, int index);
 void swap(Heap* heap, int parent_index, int child_index);
-void delete(Heap* heap);
+int delete(Heap* heap);
 void percolateDown(Heap* heap, int index);
 void printHeap(Heap* heap);
 
@@ -63,17 +63,21 @@ void swap(Heap* heap, int parent_index, int child_index) {
 }
 
 // Delete Root From The Heap 
-void delete(Heap* heap) {
+int delete(Heap* heap) {
     if(heap->size == 0) {
         printf("Heap Is Empty\n\n");
-        return;
+        return 0;
     }
+
+    int value = heap->array[0];
 
     // Replace The Root To Delete With The Last Element
     heap->array[0] = heap->array[heap->size - 1];
     heap->size--;
 
     percolateDown(heap, 0);
+
+    return value;
 }
 
 // Helper Function For Delete: Percolate Down The Value Until It Is In The Correct Index
@@ -103,6 +107,11 @@ void percolateDown(Heap* heap, int index) {
 
 // Print Heap
 void printHeap(Heap* heap) {
+    if(heap->size == 0) {
+        printf("Empty Heap \n\n");
+        return;
+    }
+    
     for(int i = 0; i < heap->size; i++) {
         printf("%d ", heap->array[i]);
     }
@@ -113,6 +122,9 @@ void printHeap(Heap* heap) {
 int main() {
     //Create Heap
     Heap* heap = createHeap();
+
+    // Heapsort Array
+    int heapsort[10] = {0}; 
 
     // Insert Values
     insert(heap, 5);
@@ -126,11 +138,21 @@ int main() {
     printHeap(heap);
 
     // Delete Values
-    delete(heap);
-    delete(heap);
+    heapsort[0] = delete(heap);
+    heapsort[1] = delete(heap);
+    heapsort[2] = delete(heap);
+    heapsort[3] = delete(heap);
+    heapsort[4] = delete(heap);
+    heapsort[5] = delete(heap);
 
     // Print Heap After Deleted Values
     printHeap(heap);
+
+    for(int i = 0; i < 6; i++) {
+    printf("%d ", heapsort[i]);
+    }
+
+    printf("\n\n");
 
     return 0;
 }
