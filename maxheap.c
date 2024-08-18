@@ -141,6 +141,10 @@ int main() {
     heapsort[0] = delete(heap);
     heapsort[1] = delete(heap);
     heapsort[2] = delete(heap);
+
+    // Print Heap After Half Deleted Values
+    printHeap(heap);
+
     heapsort[3] = delete(heap);
     heapsort[4] = delete(heap);
     heapsort[5] = delete(heap);

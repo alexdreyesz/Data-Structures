@@ -130,6 +130,10 @@ int main() {
     insert(heap, 5);
     insert(heap, 2);
     insert(heap, 3);
+
+    // Print Heap After Half Deleted Values
+    printHeap(heap);
+    
     insert(heap, 8);
     insert(heap, 6);
     insert(heap, 9);
