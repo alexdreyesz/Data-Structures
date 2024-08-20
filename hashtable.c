@@ -16,6 +16,9 @@ typedef struct HashTable {
 HashTable* resize_table(HashTable *hash_table);
 HashTable* create_node(HashTable *hash_table, char *word);
 int createKey(char *word);
+HashTable* linearProbing(HashTable *hash_table, int size);
+HashTable* quadraticProbing(HashTable *hash_table, int size);
+HashTable* chaining(HashTable *hash_table, int size);
 
 // Create Node For Hash Table
 HashTable* create_node(HashTable *hash_table, char *word) { 
@@ -81,15 +84,40 @@ int createKey(char *word) {
     return value;
 }
 
-HashTable* linearProbing(){
+HashTable* linearProbing(HashTable *hash_table, int size) {
+    HashTable *linear_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
+
+    // Initialize linear_hash_table
+    for (int i = 0; i < BucketSize; i++) {
+        linear_hash_table[i].word = NULL;
+        linear_hash_table[i].key = -1;
+        linear_hash_table[i].next = NULL;
+    }
+
+    int key = 0;
+    
+    for (int i = 0; i < size; i++) {
+        key = hash_table[i].key % BucketSize;
+
+        // Linear Probing To Find An Empty Spot
+        while (linear_hash_table[key].word != NULL) {
+            key = (key + 1) % BucketSize; // Wrap Around If Necessary
+        }
+
+        // Allocate Memory And Copy The Word
+        linear_hash_table[key].word = (char*)malloc((strlen(hash_table[i].word) + 1) * sizeof(char));
+        strcpy(linear_hash_table[key].word, hash_table[i].word);
+        linear_hash_table[key].key = hash_table[i].key;
+    }
+
+    return linear_hash_table;
+}
+
+HashTable* quadraticProbing(HashTable *hash_table, int size) {
 
 }
 
-HashTable* quadraticProbing() {
-
-}
-
-HashTable* chaining() {
+HashTable* chaining(HashTable *hash_table, int size) {
 
 }
 
@@ -119,8 +147,6 @@ int main() {
         printf("word: %s, Key: %d\n", hash_table[i].word, hash_table[i].key);
     }
 
-    printf("\n\n");
-
     // Create Linear Probing Bucket
     HashTable *linear_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
@@ -131,14 +157,17 @@ int main() {
 
     linear_hash_table = linearProbing(hash_table, HashTableSize);
 
+    printf("\n\nLINEAR PROBING:\n");
     for(int i = 0; i < BucketSize; i++) {
-        if(linear_hash_table == NULL) {
-            printf("Bucket: %d  NULL", i);
+        if(linear_hash_table[i].word == NULL) {
+            printf("Bucket: %d,  NULL\n", i);
+        } else {
+            printf("Bucket: %d,  %s\n", i, linear_hash_table[i].word);
         }
-
-        printf("Bucket: %d  Word: %s", i, linear_hash_table->word);
     }
 
+
+    /*
     // Create Quadratic Probing Bucket
     HashTable *quadratic_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
@@ -174,14 +203,24 @@ int main() {
 
         printf("Bucket: %d  Word: %s", i, chaining_hash_table->word);
     }
+    */
 
-    // Free Allocated Memory For Each Node Word
+    // Free Allocated Memory For hash_table
     for (int i = 0; i < HashTableSize; i++) {
         free(hash_table[i].word);
     }
 
-    // Free Hash Table
+
     free(hash_table);
+
+    // Free Allocated Memory For linear_hash_table
+    for (int i = 0; i < BucketSize; i++) {
+        if (linear_hash_table[i].word != NULL) {
+        free(linear_hash_table[i].word);
+        }
+    }
+
+    free(linear_hash_table);
 
     return 0;
 }
