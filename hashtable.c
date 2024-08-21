@@ -114,12 +114,81 @@ HashTable* linearProbing(HashTable *hash_table, int size) {
 }
 
 HashTable* quadraticProbing(HashTable *hash_table, int size) {
+    HashTable *quadratic_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
+    // Initialize quadratic_hash_table
+    for (int i = 0; i < BucketSize; i++) {
+        quadratic_hash_table[i].word = NULL;
+        quadratic_hash_table[i].key = -1;
+        quadratic_hash_table[i].next = NULL;
+    }
+
+    int key = 0;
+    int exponent = 0;
+    
+    for (int i = 0; i < size; i++) {
+        key = hash_table[i].key % BucketSize;
+
+        // Quadratic Probing To Find An Empty Spot
+        while (quadratic_hash_table[key].word != NULL) {
+            key = (key + 2^exponent) % BucketSize; // Wrap Around If Necessary
+            exponent++;
+            continue;
+        }
+
+        exponent = 0;
+
+        // Allocate Memory And Copy The Word
+        quadratic_hash_table[key].word = (char*)malloc((strlen(hash_table[i].word) + 1) * sizeof(char));
+        strcpy(quadratic_hash_table[key].word, hash_table[i].word);
+        quadratic_hash_table[key].key = hash_table[i].key;
+    }
+
+    return quadratic_hash_table;
 }
 
 HashTable* chaining(HashTable *hash_table, int size) {
+    HashTable *chaining_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
+    // Initialize chaining_hash_table
+    for (int i = 0; i < BucketSize; i++) {
+        chaining_hash_table[i].word = NULL;
+        chaining_hash_table[i].key = -1;
+        chaining_hash_table[i].next = NULL;
+    }
+
+    int key = 0;
+    
+    for (int i = 0; i < size; i++) {
+        key = hash_table[i].key % BucketSize;
+
+        // If The Slot Is Empty Place The New Node Directly
+        if (chaining_hash_table[key].word == NULL) {
+            chaining_hash_table[key].word = (char*)malloc((strlen(hash_table[i].word) + 1) * sizeof(char));
+            strcpy(chaining_hash_table[key].word, hash_table[i].word);
+            chaining_hash_table[key].key = hash_table[i].key;
+            chaining_hash_table[key].next = NULL;
+        } else {
+            // If The Slot Is Not Empty Chain The New Node
+            HashTable *temp = chaining_hash_table + key;
+
+            // Traverse To The End Of The Linked List
+            while (temp->next != NULL) {
+                temp = temp->next;
+            }
+
+            // Allocate A New Node At The End Of The Linked List
+            temp->next = (HashTable*)malloc(sizeof(HashTable));
+            temp->next->word = (char*)malloc((strlen(hash_table[i].word) + 1) * sizeof(char));
+            strcpy(temp->next->word, hash_table[i].word);
+            temp->next->key = hash_table[i].key;
+            temp->next->next = NULL;
+        }
+    }
+
+    return chaining_hash_table;
 }
+
 
 int main() {
     // Create Hash Table
@@ -166,8 +235,6 @@ int main() {
         }
     }
 
-
-    /*
     // Create Quadratic Probing Bucket
     HashTable *quadratic_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
@@ -178,14 +245,16 @@ int main() {
 
     quadratic_hash_table = quadraticProbing(hash_table, HashTableSize);
 
+    printf("\n\nQUADRATIC PROBING:\n");
     for(int i = 0; i < BucketSize; i++) {
-        if(quadratic_hash_table == NULL) {
-            printf("Bucket: %d  NULL", i);
+        if(quadratic_hash_table[i].word == NULL) {
+            printf("Bucket: %d,  NULL\n", i);
+        } else {
+            printf("Bucket: %d,  %s\n", i, quadratic_hash_table[i].word);
         }
-
-        printf("Bucket: %d  Word: %s", i, quadratic_hash_table->word);
     }
 
+    
     // Create Chaining Bucket
     HashTable *chaining_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
@@ -195,23 +264,32 @@ int main() {
     }
 
     chaining_hash_table = chaining(hash_table, HashTableSize);
+    
+    printf("\n\nCHAINING:\n");
+    for (int i = 0; i < BucketSize; i++) {
+        if (chaining_hash_table[i].word == NULL) {
+            printf("Bucket: %d, NULL\n", i);
+        } else {
+            printf("Bucket: %d, %s", i, chaining_hash_table[i].word);
+            HashTable *temp = chaining_hash_table[i].next;
 
-    for(int i = 0; i < BucketSize; i++) {
-        if(chaining_hash_table == NULL) {
-            printf("Bucket: %d  NULL", i);
+            // Traverse the linked list and print each word
+            while (temp != NULL) {
+                printf(" -> %s", temp->word);
+                temp = temp->next;
+            }
+            printf("\n");
         }
-
-        printf("Bucket: %d  Word: %s", i, chaining_hash_table->word);
     }
-    */
+
 
     // Free Allocated Memory For hash_table
     for (int i = 0; i < HashTableSize; i++) {
         free(hash_table[i].word);
     }
 
-
     free(hash_table);
+
 
     // Free Allocated Memory For linear_hash_table
     for (int i = 0; i < BucketSize; i++) {
@@ -221,6 +299,26 @@ int main() {
     }
 
     free(linear_hash_table);
+
+
+    // Free Allocated Memory For quadratic_hash_table
+    for (int i = 0; i < BucketSize; i++) {
+        if (quadratic_hash_table[i].word != NULL) {
+        free(linear_hash_table[i].word);
+        }
+    }
+
+    free(quadratic_hash_table);
+
+
+    // Free Allocated Memory For chaining_hash_table
+    for (int i = 0; i < BucketSize; i++) {
+        if (chaining_hash_table[i].word != NULL) {
+        free(chaining_hash_table[i].word);
+        }
+    }
+
+    free(chaining_hash_table);
 
     return 0;
 }
