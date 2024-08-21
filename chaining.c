@@ -16,8 +16,6 @@ typedef struct HashTable {
 HashTable* resize_table(HashTable *hash_table);
 HashTable* create_node(HashTable *hash_table, char *word);
 int createKey(char *word);
-HashTable* linearProbing(HashTable *hash_table, int size);
-HashTable* quadraticProbing(HashTable *hash_table, int size);
 HashTable* chaining(HashTable *hash_table, int size);
 
 // Create Node For Hash Table
@@ -211,51 +209,12 @@ int main() {
 
     printf("\n");
 
-    // Print Each Table 
+    // Print Each Table
     printf("\n\nWords Table:\n"); 
     for(int i = 0; i < HashTableSize; i++) {
-        printf("word: %s, Key: %d\n", hash_table[i].word, hash_table[i].key);
+        printf("word[%d]: %s, Key: %d\n", i, hash_table[i].word, hash_table[i].key);
     }
 
-    // Create Linear Probing Bucket
-    HashTable *linear_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
-
-    if (linear_hash_table == NULL) {
-        printf("Initial Memory Allocation Failed.\n");
-        return 1;
-    }
-
-    linear_hash_table = linearProbing(hash_table, HashTableSize);
-
-    printf("\n\nLINEAR PROBING:\n");
-    for(int i = 0; i < BucketSize; i++) {
-        if(linear_hash_table[i].word == NULL) {
-            printf("Bucket: %d,  NULL\n", i);
-        } else {
-            printf("Bucket: %d,  %s\n", i, linear_hash_table[i].word);
-        }
-    }
-
-    // Create Quadratic Probing Bucket
-    HashTable *quadratic_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
-
-    if (hash_table == NULL) {
-        printf("Initial Memory Allocation Failed.\n");
-        return 1;
-    }
-
-    quadratic_hash_table = quadraticProbing(hash_table, HashTableSize);
-
-    printf("\n\nQUADRATIC PROBING:\n");
-    for(int i = 0; i < BucketSize; i++) {
-        if(quadratic_hash_table[i].word == NULL) {
-            printf("Bucket: %d,  NULL\n", i);
-        } else {
-            printf("Bucket: %d,  %s\n", i, quadratic_hash_table[i].word);
-        }
-    }
-
-    
     // Create Chaining Bucket
     HashTable *chaining_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
@@ -269,9 +228,9 @@ int main() {
     printf("\n\nCHAINING:\n");
     for (int i = 0; i < BucketSize; i++) {
         if (chaining_hash_table[i].word == NULL) {
-            printf("Bucket: %d, NULL\n", i);
+            printf("Bucket[%d]: \n", i);
         } else {
-            printf("Bucket: %d, %s", i, chaining_hash_table[i].word);
+            printf("Bucket[%d]: %s", i, chaining_hash_table[i].word);
             HashTable *temp = chaining_hash_table[i].next;
 
             // Traverse the linked list and print each word
@@ -283,34 +242,12 @@ int main() {
         }
     }
 
-
     // Free Allocated Memory For hash_table
     for (int i = 0; i < HashTableSize; i++) {
         free(hash_table[i].word);
     }
 
     free(hash_table);
-
-
-    // Free Allocated Memory For linear_hash_table
-    for (int i = 0; i < BucketSize; i++) {
-        if (linear_hash_table[i].word != NULL) {
-        free(linear_hash_table[i].word);
-        }
-    }
-
-    free(linear_hash_table);
-
-
-    // Free Allocated Memory For quadratic_hash_table
-    for (int i = 0; i < BucketSize; i++) {
-        if (quadratic_hash_table[i].word != NULL) {
-        free(linear_hash_table[i].word);
-        }
-    }
-
-    free(quadratic_hash_table);
-
 
     // Free Allocated Memory For chaining_hash_table
     for (int i = 0; i < BucketSize; i++) {
