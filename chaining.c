@@ -218,7 +218,7 @@ int main() {
     // Create Chaining Bucket
     HashTable *chaining_hash_table = (HashTable*)malloc(BucketSize * sizeof(HashTable));
 
-    if (hash_table == NULL) {
+    if (chaining_hash_table == NULL) {
         printf("Initial Memory Allocation Failed.\n");
         return 1;
     }
