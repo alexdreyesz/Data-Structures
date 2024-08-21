@@ -214,7 +214,7 @@ int main() {
     // Print Each Table 
     printf("\n\nWords Table:\n"); 
     for(int i = 0; i < HashTableSize; i++) {
-        printf("word: %s, Key: %d\n", hash_table[i].word, hash_table[i].key);
+        printf("word[%s]: %s, Key: %d\n", i, hash_table[i].word, hash_table[i].key);
     }
 
     // Create Linear Probing Bucket
@@ -269,9 +269,9 @@ int main() {
     printf("\n\nCHAINING:\n");
     for (int i = 0; i < BucketSize; i++) {
         if (chaining_hash_table[i].word == NULL) {
-            printf("Bucket: %d, NULL\n", i);
+            printf("Bucket[%d]: \n", i);
         } else {
-            printf("Bucket: %d, %s", i, chaining_hash_table[i].word);
+            printf("Bucket[%d]: %s", i, chaining_hash_table[i].word);
             HashTable *temp = chaining_hash_table[i].next;
 
             // Traverse the linked list and print each word

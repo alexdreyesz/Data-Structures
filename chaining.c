@@ -210,7 +210,7 @@ int main() {
     printf("\n");
 
     // Print Each Table
-    printf("\n\nWords Table:\n"); 
+    printf("Words Table:\n"); 
     for(int i = 0; i < HashTableSize; i++) {
         printf("word[%d]: %s, Key: %d\n", i, hash_table[i].word, hash_table[i].key);
     }
@@ -241,6 +241,8 @@ int main() {
             printf("\n");
         }
     }
+
+    printf("\n");
 
     // Free Allocated Memory For hash_table
     for (int i = 0; i < HashTableSize; i++) {
