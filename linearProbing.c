@@ -10,7 +10,6 @@ typedef struct HashTable {
     char *word;
     int key;
     struct HashTable *next;
-
 } HashTable;
 
 HashTable* resize_table(HashTable *hash_table);
