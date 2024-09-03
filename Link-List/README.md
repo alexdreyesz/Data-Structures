@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Data-Structures
-=======
 # Link-List
 
 # Description
@@ -15,4 +12,3 @@ LeetCode
 License
 Contributions
 Contact Me
->>>>>>> Link-List/main
